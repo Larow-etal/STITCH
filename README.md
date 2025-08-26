@@ -1,6 +1,6 @@
 # stitch.py: Mutation‑aware Codon Optimization
 
-Generate a codon‑optimized coding DNA sequence (CDS) from an input amino‑acid sequence. Optionally keep wild‑type (WT) nucleotides for all unchanged residues by referencing a WT coding sequence retrieved using a UniProt ID or NCBI RefSeq protein accession—optimizing **only** the mutated positions. If no WT is given, a full codon optimization is performed.
+Generate a codon‑optimized coding DNA sequence (CDS) from an input amino‑acid sequence. Optionally keep wild‑type (WT) nucleotides for all unchanged residues by referencing a WT coding sequence retrieved using a UniProt ID or NCBI RefSeq protein accession, optimizing **only** the mutated positions. If no WT is given, a full codon optimization is performed.
 
 > **Use cases:** cloning designed proteins into expression vectors, preserving WT nucleotide context while introducing amino‑acid mutations, generating CDS for E. coli, yeast, or human expression, or using a custom codon table for another host.
 
