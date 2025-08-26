@@ -1,4 +1,4 @@
-# stitch.py — Mutation‑aware Codon Optimization
+# stitch.py: Mutation‑aware Codon Optimization
 
 Generate a codon‑optimized coding DNA sequence (CDS) from an input amino‑acid sequence. Optionally keep wild‑type (WT) nucleotides for all unchanged residues by referencing a WT coding sequence retrieved using a UniProt ID or NCBI RefSeq protein accession—optimizing **only** the mutated positions. If no WT is given, a full codon optimization is performed.
 
@@ -118,6 +118,66 @@ python stitch.py --aa @design.faa --uniprot P69905 \
 
 ---
 
+## Quality Control and Similarity Metrics
+
+STITCH can optionally compute post-optimization quality metrics to evaluate the resulting coding sequence.
+
+### ✅ New command-line flags:
+
+- `--qc`  
+  Print quality metrics to the terminal.
+
+- `--qc-report <file>`  
+  Write metrics to a report file.
+
+Metrics include:
+
+- **CAI** – Codon Adaptation Index (host-specific codon conformity)
+- **GC Content** – Total G+C percentage in sequence
+- **GC3 Content** – G+C percentage at 3rd codon position
+- **ENC** – Effective Number of Codons (codon usage diversity)
+- **% WT Codons Retained** – Fraction of codons that are identical to the WT
+- **% Nucleotide Identity to WT** – Total nucleotide match between design and WT
+
+> These metrics are only computed in **mutation-only mode** (when a WT CDS is provided).
+
+---
+
+### 💻 Example: With WT CDS (manual), including QC analysis
+
+```bash
+python stitch.py \
+  --aa @design.faa \
+  --wt-cds @WT_CDS.fna \
+  --host ecoli_k12 \
+  -o design_vs_wt_manual.fasta \
+  --report design_vs_wt_report.txt \
+  --qc \
+  --qc-report design_vs_wt_qc.txt
+```
+
+### 📋 Sample QC output:
+
+```
+# STITCH Quality Control Metrics
+CAI: 0.842
+GC Content: 53.2%
+GC3 Content: 49.8%
+Effective Number of Codons (ENC): 1.20
+% WT Codons Retained: 84.6%
+% Nucleotide Identity to WT: 88.1%
+```
+
+> These help validate both biological realism and context preservation.
+
+
+## Requirements
+- Python 3.8+
+- `pip install -r requirements.txt`
+
+  
+---
+
 ## Input formats & conventions
 
 - **Amino‑acid sequence (`--aa`)**
@@ -226,6 +286,8 @@ Save as `custom_codons.json`, then run with `--host custom --host-codon-table cu
 
 ## Citation & data sources
 
+Olanrewaju Ayodeji Durojaye. (2025). STITCH [Source code]. GitHub. https://github.com/Larow-etal/STITCH/
+
 This tool programmatically accesses public APIs from **UniProt** and **NCBI** (E‑utilities) when you provide IDs. Please respect their usage guidelines and cite the databases in your publications as appropriate.
 
 ---
@@ -277,62 +339,5 @@ optional arguments:
 ```
 
 
----
 
-## Quality Control and Similarity Metrics
-
-STITCH can optionally compute post-optimization quality metrics to evaluate the resulting coding sequence.
-
-### ✅ New command-line flags:
-
-- `--qc`  
-  Print quality metrics to the terminal.
-
-- `--qc-report <file>`  
-  Write metrics to a report file.
-
-Metrics include:
-
-- **CAI** – Codon Adaptation Index (host-specific codon conformity)
-- **GC Content** – Total G+C percentage in sequence
-- **GC3 Content** – G+C percentage at 3rd codon position
-- **ENC** – Effective Number of Codons (codon usage diversity)
-- **% WT Codons Retained** – Fraction of codons that are identical to the WT
-- **% Nucleotide Identity to WT** – Total nucleotide match between design and WT
-
-> These metrics are only computed in **mutation-only mode** (when a WT CDS is provided).
-
----
-
-### 💻 Example: With WT CDS (manual), including QC analysis
-
-```bash
-python stitch.py \
-  --aa @design.faa \
-  --wt-cds @WT_CDS.fna \
-  --host ecoli_k12 \
-  -o design_vs_wt_manual.fasta \
-  --report design_vs_wt_report.txt \
-  --qc \
-  --qc-report design_vs_wt_qc.txt
-```
-
-### 📋 Sample QC output:
-
-```
-# STITCH Quality Control Metrics
-CAI: 0.842
-GC Content: 53.2%
-GC3 Content: 49.8%
-Effective Number of Codons (ENC): 1.20
-% WT Codons Retained: 84.6%
-% Nucleotide Identity to WT: 88.1%
-```
-
-> These help validate both biological realism and context preservation.
-
-
-## Requirements
-- Python 3.8+
-- `pip install -r requirements.txt`
 
